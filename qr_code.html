@@ -297,6 +297,10 @@
                     <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span>歷史紀錄</span>
                 </button>
+                <button onclick="switchTab('guide')" id="nav-btn-guide" class="nav-tab nav-tab-inactive flex items-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap">
+                    <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span>使用手冊</span>
+                </button>
             </nav>
 
             <!-- Quick Theme Switch Button -->
@@ -1148,6 +1152,315 @@
 
                     <div id="history-list" class="space-y-3">
                         <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 6: 使用說明手冊與常見問答 (User Guide & FAQ) -->
+        <!-- ========================================================================= -->
+        <section id="tab-guide" class="tab-content">
+            <div class="max-w-5xl mx-auto space-y-8">
+                
+                <!-- Guide Header Banner -->
+                <div class="glass-panel p-6 sm:p-8 rounded-3xl text-center space-y-3 bg-gradient-to-b from-cyan-500/10 via-transparent to-transparent border border-cyan-500/20">
+                    <div class="inline-flex p-3 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 mb-1">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold font-display dark:text-white text-slate-900">使用說明手冊與常見問答 (FAQ)</h2>
+                    <p class="dark:text-slate-400 text-slate-600 text-xs sm:text-sm max-w-2xl mx-auto">
+                        完整解析工具箱各功能操作技巧、掃碼辨識最佳化秘笈、實體印刷排版注意事項與常見問題解答。
+                    </p>
+                </div>
+
+                <!-- SECTION 1: 核心功能操作圖解指南 -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2 border-b dark:border-slate-800 border-slate-200 pb-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+                        <h3 class="text-lg font-bold font-display dark:text-white text-slate-900">一、核心功能操作指引</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        
+                        <!-- Card 1: 產生與美化 -->
+                        <div class="glass-panel p-5 rounded-2xl space-y-3 flex flex-col justify-between border-l-4 border-l-brand-500">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-bold text-sm">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                                    1. QR Code 產生與視覺美化
+                                </div>
+                                <p class="text-xs dark:text-slate-400 text-slate-600 leading-relaxed">
+                                    支援 8 大格式（網址、文字、Wi-Fi、名片、Email、電話、社群、地圖）。可自由切換 6 種點陣、漸層色彩、角落造型與嵌入自訂 Logo。
+                                </p>
+                                <ul class="text-[11px] dark:text-slate-400 text-slate-500 space-y-1 list-disc list-inside">
+                                    <li>支援 PNG、SVG (印刷向量無損)、JPEG、WebP。</li>
+                                    <li>嵌入 Logo 時系統會自動提升容錯率為最高 H (30%)。</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchTab('generator')" class="w-full py-1.5 px-3 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 text-xs font-semibold text-center transition-colors">
+                                前往產生器 ➔
+                            </button>
+                        </div>
+
+                        <!-- Card 2: 智慧短網址 -->
+                        <div class="glass-panel p-5 rounded-2xl space-y-3 flex flex-col justify-between border-l-4 border-l-indigo-500">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    2. 智慧短網址服務
+                                </div>
+                                <p class="text-xs dark:text-slate-400 text-slate-600 leading-relaxed">
+                                    將複雜的長網址一鍵縮短。長網址會讓 QR Code 點陣非常密，容易導致手機遠距離難以對焦；縮短後點陣變稀疏，掃碼辨識率提升 200%！
+                                </p>
+                                <ul class="text-[11px] dark:text-slate-400 text-slate-500 space-y-1 list-disc list-inside">
+                                    <li>在【網址】欄位點擊「⚡ 一鍵縮短網址」。</li>
+                                    <li>支援即時複製短網址至剪貼簿。</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchTab('generator')" class="w-full py-1.5 px-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-semibold text-center transition-colors">
+                                體驗短網址 ➔
+                            </button>
+                        </div>
+
+                        <!-- Card 3: 圖片轉 QR -->
+                        <div class="glass-panel p-5 rounded-2xl space-y-3 flex flex-col justify-between border-l-4 border-l-purple-500">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-sm">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    3. 圖片轉 QR Code
+                                </div>
+                                <p class="text-xs dark:text-slate-400 text-slate-600 leading-relaxed">
+                                    拖曳上傳照片、作品、菜單或公告，自動生成雲端直連網址與專屬 QR 碼。任何人用手機相機掃描即可立即在線上檢視與下載。
+                                </p>
+                                <ul class="text-[11px] dark:text-slate-400 text-slate-500 space-y-1 list-disc list-inside">
+                                    <li>支援 PNG, JPG, GIF, WebP (上限 10MB)。</li>
+                                    <li>推薦用於活動海報、餐廳菜單等公開分享。</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchTab('image-qr')" class="w-full py-1.5 px-3 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 text-xs font-semibold text-center transition-colors">
+                                上傳圖片轉碼 ➔
+                            </button>
+                        </div>
+
+                        <!-- Card 4: 相機與截圖解碼 -->
+                        <div class="glass-panel p-5 rounded-2xl space-y-3 flex flex-col justify-between border-l-4 border-l-pink-500">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-bold text-sm">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                                    4. 掃描與解碼 (相機 & 截圖)
+                                </div>
+                                <p class="text-xs dark:text-slate-400 text-slate-600 leading-relaxed">
+                                    調用筆電或手機鏡頭即時掃描；在電腦上看到螢幕截圖時，直接按下鍵盤 <kbd class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-pink-500 font-mono text-[10px]">Ctrl + V</kbd> 即可秒速解碼讀取內容！
+                                </p>
+                                <ul class="text-[11px] dark:text-slate-400 text-slate-500 space-y-1 list-disc list-inside">
+                                    <li>解碼內容支援一鍵前往網址或複製文字。</li>
+                                    <li>可一鍵帶入產生器重新自訂美化。</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchTab('scanner')" class="w-full py-1.5 px-3 rounded-xl bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 text-xs font-semibold text-center transition-colors">
+                                前往掃描器 ➔
+                            </button>
+                        </div>
+
+                        <!-- Card 5: 批次大量產生 -->
+                        <div class="glass-panel p-5 rounded-2xl space-y-3 flex flex-col justify-between border-l-4 border-l-amber-500">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                    5. 批次大量產生與 ZIP 打包
+                                </div>
+                                <p class="text-xs dark:text-slate-400 text-slate-600 leading-relaxed">
+                                    貼上多行網址、會員編號或商品序號，一鍵瞬間批次繪製數十張 QR Code，並可直接打包為 ZIP 壓縮檔一次全部下載！
+                                </p>
+                                <ul class="text-[11px] dark:text-slate-400 text-slate-500 space-y-1 list-disc list-inside">
+                                    <li>支援自訂檔案前綴（例如 qrcode_1.png）。</li>
+                                    <li>適合活動門票、商品標籤、桌號卡批次製作。</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchTab('batch')" class="w-full py-1.5 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-semibold text-center transition-colors">
+                                批次產生 ➔
+                            </button>
+                        </div>
+
+                        <!-- Card 6: 本機歷史紀錄 -->
+                        <div class="glass-panel p-5 rounded-2xl space-y-3 flex flex-col justify-between border-l-4 border-l-emerald-500">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    6. 本機歷史紀錄管理
+                                </div>
+                                <p class="text-xs dark:text-slate-400 text-slate-600 leading-relaxed">
+                                    自動記錄您最近產生的 QR Code 與解碼紀錄。資料 100% 儲存在您的瀏覽器內部（LocalStorage），換頁或重新開啟都不會遺失。
+                                </p>
+                                <ul class="text-[11px] dark:text-slate-400 text-slate-500 space-y-1 list-disc list-inside">
+                                    <li>一鍵將歷史內容重新載入產生器繼續編輯。</li>
+                                    <li>隨時可一鍵清空所有歷史紀錄，保障個人隱私。</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchTab('history')" class="w-full py-1.5 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold text-center transition-colors">
+                                檢視歷史紀錄 ➔
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SECTION 2: 常見問答 (FAQ) -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2 border-b dark:border-slate-800 border-slate-200 pb-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                        <h3 class="text-lg font-bold font-display dark:text-white text-slate-900">二、常見問題解答 (FAQ)</h3>
+                    </div>
+
+                    <div class="space-y-3 text-xs sm:text-sm">
+                        
+                        <!-- FAQ 1: Wi-Fi -->
+                        <details class="glass-panel p-4 rounded-2xl group cursor-pointer">
+                            <summary class="font-bold dark:text-white text-slate-900 flex items-center justify-between list-none">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-brand-500/20 text-brand-600 dark:text-brand-400 inline-flex items-center justify-center text-xs font-bold">Q1</span>
+                                    為什麼手機掃描 Wi-Fi QR Code 之後沒有自動連上網路？
+                                </span>
+                                <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="pt-3 text-xs dark:text-slate-300 text-slate-600 leading-relaxed border-t dark:border-slate-800 border-slate-200 mt-3 space-y-1.5">
+                                <p><strong>請檢查以下 3 個關鍵設定：</strong></p>
+                                <ol class="list-decimal list-inside space-y-1 pl-1">
+                                    <li><strong>Wi-Fi 名稱 (SSID) 與密碼大小寫</strong>：Wi-Fi 密碼具備大小寫區分，請確保與分享器設定完全相符。</li>
+                                    <li><strong>點擊系統確認提示</strong>：iOS (iPhone) 掃描後頂部會跳出「要加入網路 XXX 嗎？」，請點擊「加入」；Android 亦會跳出「連線至此網路」提示。</li>
+                                    <li><strong>隱藏 SSID</strong>：如果您的 Wi-Fi 是隱藏名稱的網路，產生時請務必勾選「隱藏 SSID」選項。</li>
+                                </ol>
+                            </div>
+                        </details>
+
+                        <!-- FAQ 2: vCard -->
+                        <details class="glass-panel p-4 rounded-2xl group cursor-pointer">
+                            <summary class="font-bold dark:text-white text-slate-900 flex items-center justify-between list-none">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 inline-flex items-center justify-center text-xs font-bold">Q2</span>
+                                    掃描 vCard 電子名片 QR Code 後，如何一鍵存入 iPhone / Android 通訊錄？
+                                </span>
+                                <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="pt-3 text-xs dark:text-slate-300 text-slate-600 leading-relaxed border-t dark:border-slate-800 border-slate-200 mt-3 space-y-1.5">
+                                <p>本工具箱產生的名片符合國際標準 **vCard 3.0 格式**：</p>
+                                <ul class="list-disc list-inside space-y-1 pl-1">
+                                    <li><strong>iPhone (iOS)</strong>：直接打開「內建相機」對準 QR 碼，畫面會出現聯絡人黃色標籤，點擊後會自動開啟聯絡資訊，按右上角「儲存」即可完整匯入姓名、職稱、電話、Email 與官網！</li>
+                                    <li><strong>Android 手機</strong>：使用 Google 鏡頭或內建相機掃描，點擊「新增至聯絡人」即可一鍵存入 Google 帳號通訊錄。</li>
+                                </ul>
+                            </div>
+                        </details>
+
+                        <!-- FAQ 3: Logo Scanability -->
+                        <details class="glass-panel p-4 rounded-2xl group cursor-pointer">
+                            <summary class="font-bold dark:text-white text-slate-900 flex items-center justify-between list-none">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-600 dark:text-purple-400 inline-flex items-center justify-center text-xs font-bold">Q3</span>
+                                    嵌入自訂 Logo 時，如何確保依然容易被手機辨識（不被遮擋）？
+                                </span>
+                                <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="pt-3 text-xs dark:text-slate-300 text-slate-600 leading-relaxed border-t dark:border-slate-800 border-slate-200 mt-3 space-y-1.5">
+                                <p>QR Code 內建強大的「Reed-Solomon 容錯糾錯技術」：</p>
+                                <ul class="list-disc list-inside space-y-1 pl-1">
+                                    <li><strong>容錯率設定</strong>：當您嵌入 Logo 時，系統會自動切換為 <strong>最高容錯率 H (30%)</strong>，代表中心即使有 30% 面積被遮擋，依然能 100% 正確解碼。</li>
+                                    <li><strong>Logo 大小建議</strong>：建議滑桿維持在 <strong>0.3 ~ 0.35 (30%~35%)</strong> 之間，並保持「留白邊距」在 6px 以上，避免覆蓋到 QR Code 三個角落的定位方塊。</li>
+                                </ul>
+                            </div>
+                        </details>
+
+                        <!-- FAQ 4: Cloud image hosting -->
+                        <details class="glass-panel p-4 rounded-2xl group cursor-pointer">
+                            <summary class="font-bold dark:text-white text-slate-900 flex items-center justify-between list-none">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-pink-500/20 text-pink-600 dark:text-pink-400 inline-flex items-center justify-center text-xs font-bold">Q4</span>
+                                    「圖片轉 QR Code」的線上照片會保存多久？有檔案大小限制嗎？
+                                </span>
+                                <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="pt-3 text-xs dark:text-slate-300 text-slate-600 leading-relaxed border-t dark:border-slate-800 border-slate-200 mt-3 space-y-1.5">
+                                <ul class="list-disc list-inside space-y-1 pl-1">
+                                    <li><strong>檔案大小限制</strong>：單張圖片上限為 <strong>10MB</strong>，支援 PNG、JPG、GIF、WebP 格式。</li>
+                                    <li><strong>保存期限</strong>：免登入雲端空間適合活動傳單、餐廳菜單、臨時作品等公開展示用途。</li>
+                                    <li><strong>如何永久保存？</strong>：如果您想長期保存且掌控隱私，建議將照片上傳至個人的 <strong>Google 雲端硬碟</strong> ➔ 開啟共享連結 ➔ 到工具箱的【網址】產生 QR Code。</li>
+                                </ul>
+                            </div>
+                        </details>
+
+                        <!-- FAQ 5: Offline usage -->
+                        <details class="glass-panel p-4 rounded-2xl group cursor-pointer">
+                            <summary class="font-bold dark:text-white text-slate-900 flex items-center justify-between list-none">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 inline-flex items-center justify-center text-xs font-bold">Q5</span>
+                                    這個工具箱在沒有網路（離線環境）下可以使用嗎？
+                                </span>
+                                <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="pt-3 text-xs dark:text-slate-300 text-slate-600 leading-relaxed border-t dark:border-slate-800 border-slate-200 mt-3 space-y-1.5">
+                                <p><strong>絕大部分功能 100% 支援離線使用！</strong></p>
+                                <p>包含：QR Code 產生與所有美化調色、Logo 嵌入、PNG/SVG 下載、相機與圖片解碼、批次大量產生與 ZIP 打包、歷史紀錄管理。所有運算皆在您的瀏覽器本地（JavaScript & Canvas）執行，不依賴後端伺服器，安全又快速！</p>
+                            </div>
+                        </details>
+
+                        <!-- FAQ 6: Commercial & License -->
+                        <details class="glass-panel p-4 rounded-2xl group cursor-pointer">
+                            <summary class="font-bold dark:text-white text-slate-900 flex items-center justify-between list-none">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 inline-flex items-center justify-center text-xs font-bold">Q6</span>
+                                    產生的 QR Code 可以免費商用嗎？有掃描次數限制嗎？
+                                </span>
+                                <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="pt-3 text-xs dark:text-slate-300 text-slate-600 leading-relaxed border-t dark:border-slate-800 border-slate-200 mt-3 space-y-1.5">
+                                <p><strong>完全免費、永久有效、無掃描次數限制！</strong></p>
+                                <p>本工具箱採用 MIT 開源授權，產出的靜態 QR Code 不經過任何中間轉址伺服器（直接編碼您的目標文字或網址），因此不會失效、沒有掃描次數上限，您可以完全自由地用於商業宣傳、名片、海報印刷或包裝上！</p>
+                            </div>
+                        </details>
+
+                    </div>
+                </div>
+
+                <!-- SECTION 3: 實體列印與排版最佳實踐 -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2 border-b dark:border-slate-800 border-slate-200 pb-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                        <h3 class="text-lg font-bold font-display dark:text-white text-slate-900">三、實體列印與排版注意事項</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="glass-panel p-4 rounded-2xl space-y-2">
+                            <div class="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                                📏 1. 建議最小列印尺寸
+                            </div>
+                            <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
+                                • <strong>個人名片</strong>：建議至少 <strong>2 × 2 cm</strong>。<br>
+                                • <strong>桌牌/菜單/傳單</strong>：建議 <strong>4 × 4 ~ 6 × 6 cm</strong>。<br>
+                                • <strong>戶外海報/易拉寶</strong>：建議 <strong>8 × 8 ~ 15 × 15 cm</strong> 以上，方便遠距離掃描。
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl space-y-2">
+                            <div class="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                                🎨 2. 色彩高對比原則
+                            </div>
+                            <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
+                                鏡頭辨識仰賴明暗對比！<strong>前景色（點陣）必須明顯深於背景色</strong>。<br>
+                                • ✅ 推薦：深黑/深藍點陣 + 純白/淺色背景。<br>
+                                • ❌ 避免：淺黃/淺粉點陣 + 白色背景。
+                            </p>
+                        </div>
+
+                        <div class="glass-panel p-4 rounded-2xl space-y-2">
+                            <div class="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                                🔲 3. 安靜區 (Quiet Zone) 留白
+                            </div>
+                            <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
+                                QR Code 四周必須保留一定寬度的<strong>純色留白邊距</strong>。<br>
+                                排版時請勿讓文字、裝飾線條或花紋緊貼 QR Code 邊緣，以利相機快速鎖定邊界。
+                            </p>
+                        </div>
                     </div>
                 </div>
 

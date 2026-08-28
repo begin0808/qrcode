@@ -67,7 +67,10 @@
 6. **🕒 本機歷史紀錄管理**：
    - 自動記錄操作歷史，隨時可一鍵複製或重新載入編輯，100% 存放於瀏覽器 LocalStorage，隱私不外洩。
 
-7. **📱 完整響應式 (RWD) 與清新溫柔風主題**：
+7. **📖 內建完整使用手冊與常見問答 (FAQ)**：
+   - 內建 6 大核心功能圖解、6 大常見問題排解指南（Wi-Fi、vCard、Logo 容錯率、離線與商用授權），以及實體列印最小尺寸與色彩對比建議。
+
+8. **📱 完整響應式 (RWD) 與清新溫柔風主題**：
    - 手機、平板與電腦皆享有流暢操作體驗。
    - 預設「清新溫柔風」淺色模式，並支援一鍵切換「質感深色模式」。
 
@@ -129,6 +132,8 @@
   * Download all items bundled into a single ZIP archive.
 * **🕒 Local History Management**:
   * Automatically saves recent generations with easy copy & reload actions.
+* **📖 Built-in User Guide & FAQ Knowledge Base**:
+  * In-depth feature walk-throughs, troubleshooting guides (Wi-Fi, vCard, Error Correction), and physical print checklist.
 * **📱 Fully Responsive Design & Fresh Gentle Light/Dark Mode**:
   * Optimized for mobile phones, tablets, and desktop workstations.
 
