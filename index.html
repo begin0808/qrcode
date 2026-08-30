@@ -1004,10 +1004,10 @@
                             <h3 class="font-bold dark:text-white text-slate-900 text-base">即時相機鏡頭掃描</h3>
                         </div>
                         <div class="flex items-center gap-2">
-                            <select id="camera-device-select" class="px-3 py-1.5 rounded-xl text-xs outline-none">
-                                <option value="">正在偵測相機鏡頭...</option>
+                            <select id="camera-device-select" onchange="switchCameraDevice()" class="px-3 py-1.5 rounded-xl text-xs outline-none dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 dark:text-slate-200 text-slate-700 max-w-[140px] sm:max-w-xs truncate">
+                                <option value="">相機偵測中...</option>
                             </select>
-                            <button id="btn-toggle-camera" onclick="toggleCameraScanning()" class="px-4 py-1.5 bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs rounded-xl transition-all">
+                            <button id="btn-toggle-camera" onclick="toggleCameraScanning()" class="px-4 py-1.5 bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs rounded-xl transition-all shrink-0">
                                 開啟鏡頭
                             </button>
                         </div>
@@ -1015,7 +1015,7 @@
 
                     <!-- Video Viewport Container -->
                     <div class="relative w-full max-w-md mx-auto aspect-square bg-slate-950 rounded-2xl overflow-hidden border-2 dark:border-slate-800 border-slate-300 flex items-center justify-center shadow-inner">
-                        <video id="scanner-video" class="w-full h-full object-cover"></video>
+                        <video id="scanner-video" class="w-full h-full object-cover" autoplay playsinline webkit-playsinline muted></video>
                         
                         <!-- Scanning Frame Overlay -->
                         <div id="scanner-overlay" class="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
@@ -2329,21 +2329,66 @@
             try {
                 if (!AppState.codeReader) {
                     const hints = new Map();
-                    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.QR_CODE, ZXing.BarcodeFormat.DATA_MATRIX]);
+                    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [
+                        ZXing.BarcodeFormat.QR_CODE, 
+                        ZXing.BarcodeFormat.DATA_MATRIX,
+                        ZXing.BarcodeFormat.AZTEC,
+                        ZXing.BarcodeFormat.EAN_13,
+                        ZXing.BarcodeFormat.EAN_8,
+                        ZXing.BarcodeFormat.CODE_128
+                    ]);
                     hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
                     AppState.codeReader = new ZXing.BrowserMultiFormatReader(hints);
                 }
 
-                const videoInputDevices = await AppState.codeReader.listVideoInputDevices();
-                deviceSelect.innerHTML = '';
-                videoInputDevices.forEach(device => {
-                    const option = document.createElement('option');
-                    option.value = device.deviceId;
-                    option.text = device.label || `攝影機 (${device.deviceId.slice(0, 5)}...)`;
-                    deviceSelect.appendChild(option);
-                });
+                // Explicit mobile video stream attributes to prevent black screen
+                videoElem.setAttribute('autoplay', 'true');
+                videoElem.setAttribute('muted', 'true');
+                videoElem.setAttribute('playsinline', 'true');
+                videoElem.setAttribute('webkit-playsinline', 'true');
+                videoElem.muted = true;
 
-                const selectedDeviceId = deviceSelect.value || undefined;
+                // Try to list available camera devices
+                let videoInputDevices = [];
+                try {
+                    videoInputDevices = await AppState.codeReader.listVideoInputDevices();
+                } catch (e) {
+                    console.warn('Could not list devices beforehand', e);
+                }
+
+                deviceSelect.innerHTML = '';
+                let defaultDeviceId = undefined;
+                let rearCameraFound = false;
+
+                if (videoInputDevices && videoInputDevices.length > 0) {
+                    videoInputDevices.forEach((device, index) => {
+                        const option = document.createElement('option');
+                        option.value = device.deviceId;
+                        const label = device.label || `攝影鏡頭 ${index + 1}`;
+                        option.text = label;
+
+                        // Prefer rear / environment camera on smartphones
+                        const isBack = /back|rear|environment|後/i.test(label);
+                        if (isBack && !rearCameraFound) {
+                            option.selected = true;
+                            defaultDeviceId = device.deviceId;
+                            rearCameraFound = true;
+                        }
+                        deviceSelect.appendChild(option);
+                    });
+
+                    if (!rearCameraFound && deviceSelect.options.length > 0) {
+                        // On many mobile devices without explicit labels, the last device is often the rear camera
+                        if (videoInputDevices.length > 1) {
+                            deviceSelect.selectedIndex = videoInputDevices.length - 1;
+                            defaultDeviceId = deviceSelect.value;
+                        } else {
+                            defaultDeviceId = deviceSelect.value;
+                        }
+                    }
+                }
+
+                const selectedDeviceId = deviceSelect.value || defaultDeviceId || undefined;
 
                 inactiveView.classList.add('hidden');
                 btnToggle.textContent = '關閉鏡頭';
@@ -2351,17 +2396,74 @@
                 btnToggle.classList.add('bg-rose-600', 'hover:bg-rose-500');
                 AppState.isCameraRunning = true;
 
-                AppState.codeReader.decodeFromVideoDevice(selectedDeviceId, videoElem, (result, err) => {
+                // Start decoding from chosen video device
+                await AppState.codeReader.decodeFromVideoDevice(selectedDeviceId, videoElem, (result, err) => {
                     if (result) {
                         handleScanSuccess(result.getText());
                     }
                 });
 
-                showToast('相機鏡頭已啟動，正在即時掃描...');
+                // Auto-play the video element if needed
+                try {
+                    await videoElem.play();
+                } catch (e) {}
+
+                // After permission is granted, device labels become available, so refresh the list
+                setTimeout(async () => {
+                    try {
+                        const updatedDevices = await AppState.codeReader.listVideoInputDevices();
+                        if (updatedDevices && updatedDevices.length > 0) {
+                            const curVal = deviceSelect.value;
+                            deviceSelect.innerHTML = '';
+                            updatedDevices.forEach((device, idx) => {
+                                const opt = document.createElement('option');
+                                opt.value = device.deviceId;
+                                opt.text = device.label || `攝影鏡頭 ${idx + 1}`;
+                                if (device.deviceId === curVal) opt.selected = true;
+                                deviceSelect.appendChild(opt);
+                            });
+                        }
+                    } catch(e) {}
+                }, 1000);
+
+                showToast('相機鏡頭已啟動，請將 QR Code 置於方框內...');
             } catch (err) {
-                console.error(err);
-                showToast('無法取得相機權限或找不到攝影鏡頭');
+                console.error('Camera scanning error:', err);
+                showToast('無法開啟相機鏡頭：請確認已允許相機權限');
                 stopCameraScanning();
+            }
+        }
+
+        async function switchCameraDevice() {
+            if (!AppState.isCameraRunning) return;
+            const videoElem = document.getElementById('scanner-video');
+            const deviceSelect = document.getElementById('camera-device-select');
+            const selectedDeviceId = deviceSelect.value || undefined;
+
+            try {
+                if (AppState.codeReader) {
+                    AppState.codeReader.reset();
+                }
+                videoElem.setAttribute('autoplay', 'true');
+                videoElem.setAttribute('muted', 'true');
+                videoElem.setAttribute('playsinline', 'true');
+                videoElem.setAttribute('webkit-playsinline', 'true');
+                videoElem.muted = true;
+
+                await AppState.codeReader.decodeFromVideoDevice(selectedDeviceId, videoElem, (result, err) => {
+                    if (result) {
+                        handleScanSuccess(result.getText());
+                    }
+                });
+
+                try {
+                    await videoElem.play();
+                } catch(e) {}
+
+                showToast('已切換鏡頭');
+            } catch (err) {
+                console.error('Switch camera error:', err);
+                showToast('切換鏡頭失敗，請重新嘗試');
             }
         }
 
@@ -2427,6 +2529,9 @@
         }
 
         function handleScanSuccess(text) {
+            if (navigator.vibrate) {
+                try { navigator.vibrate(100); } catch(e) {}
+            }
             const resultBox = document.getElementById('decode-result-box');
             const contentText = document.getElementById('decoded-content-text');
             const timeBadge = document.getElementById('decode-time-badge');
@@ -2445,6 +2550,7 @@
 
             saveToHistory('掃描解碼', text);
             showToast('🎯 成功解碼 QR Code！');
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function copyDecodedText() {
