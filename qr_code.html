@@ -247,6 +247,15 @@
             border: 1px solid rgba(0,0,0,0.1);
             border-radius: 8px;
         }
+
+        /* Hide scrollbars for horizontal nav while maintaining scrollability */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-300 antialiased selection:bg-brand-500 selection:text-white">
@@ -268,56 +277,67 @@
     </div>
 
     <!-- Header Navigation -->
-    <header class="header-bar sticky top-0 z-40 glass-panel border-b dark:border-slate-800/80 px-4 lg:px-8 py-3.5 transition-all">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <!-- Brand Logo & Title -->
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 via-indigo-500 to-pink-500 flex items-center justify-center shadow-glow-emerald">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-                    </svg>
+    <header class="header-bar sticky top-0 z-40 glass-panel border-b dark:border-slate-800/80 px-3 sm:px-4 lg:px-8 py-2.5 sm:py-3.5 transition-all">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 lg:gap-4">
+            <!-- Brand Logo & Title (Top row on mobile) -->
+            <div class="flex items-center justify-between w-full lg:w-auto">
+                <div class="flex items-center space-x-2.5 sm:space-x-3 min-w-0">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-brand-500 via-indigo-500 to-pink-500 flex items-center justify-center shadow-glow-emerald shrink-0">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                        </svg>
+                    </div>
+                    <div class="min-w-0 flex items-center gap-1.5 sm:gap-2">
+                        <h1 class="text-base sm:text-lg lg:text-xl font-bold font-display tracking-tight dark:text-white text-slate-900 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                            <span>Studio0808</span>
+                            <span class="gradient-text font-extrabold">QR Code萬用工具箱</span>
+                        </h1>
+                        <span class="text-[10px] px-1.5 py-0.5 font-semibold bg-brand-500/20 text-brand-600 dark:text-brand-400 border border-brand-500/30 rounded-full shrink-0">PRO</span>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-lg sm:text-xl font-bold font-display tracking-tight dark:text-white text-slate-900 flex items-center gap-2">
-                        Studio0808 <span class="gradient-text">QR Code萬用工具箱</span>
-                        <span class="text-[10px] px-2 py-0.5 font-semibold bg-brand-500/20 text-brand-600 dark:text-brand-400 border border-brand-500/30 rounded-full">PRO</span>
-                    </h1>
+
+                <!-- Quick Theme Switch Button on Mobile (< lg) -->
+                <div class="flex items-center gap-2 lg:hidden shrink-0">
+                    <button onclick="toggleTheme()" class="theme-toggle-btn p-2 rounded-xl dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white shadow-sm transition-colors" title="切換深淺色主題">
+                        <svg class="theme-icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        <svg class="theme-icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </button>
                 </div>
             </div>
 
-            <!-- Navigation Tabs -->
-            <nav class="nav-container flex items-center dark:bg-slate-900/90 bg-slate-100 p-1.5 rounded-xl border dark:border-slate-800/90 border-slate-200 text-sm font-medium overflow-x-auto max-w-full">
-                <button onclick="switchTab('generator')" id="nav-btn-generator" class="nav-tab nav-tab-active flex items-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-white dark:bg-slate-800 bg-white text-slate-900 shadow-sm transition-all whitespace-nowrap">
-                    <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+            <!-- Navigation Tabs (Full width scrollable on mobile, compact centered on desktop) -->
+            <nav class="nav-container flex items-center dark:bg-slate-900/90 bg-slate-100 p-1 sm:p-1.5 rounded-xl border dark:border-slate-800/90 border-slate-200 text-xs sm:text-sm font-medium overflow-x-auto no-scrollbar max-w-full w-full lg:w-auto gap-1">
+                <button onclick="switchTab('generator')" id="nav-btn-generator" class="nav-tab nav-tab-active flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-white dark:bg-slate-800 bg-white text-slate-900 shadow-sm transition-all whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-brand-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                     <span>產生與美化</span>
                 </button>
-                <button onclick="switchTab('image-qr')" id="nav-btn-image-qr" class="nav-tab nav-tab-inactive flex items-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap">
-                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <button onclick="switchTab('image-qr')" id="nav-btn-image-qr" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     <span>圖片轉 QR</span>
                 </button>
-                <button onclick="switchTab('scanner')" id="nav-btn-scanner" class="nav-tab nav-tab-inactive flex items-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap">
-                    <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                <button onclick="switchTab('scanner')" id="nav-btn-scanner" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-pink-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
                     <span>掃描與解碼</span>
                 </button>
-                <button onclick="switchTab('batch')" id="nav-btn-batch" class="nav-tab nav-tab-inactive flex items-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap">
-                    <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <button onclick="switchTab('batch')" id="nav-btn-batch" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     <span>批次大量</span>
                 </button>
-                <button onclick="switchTab('history')" id="nav-btn-history" class="nav-tab nav-tab-inactive flex items-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap">
-                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <button onclick="switchTab('history')" id="nav-btn-history" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span>歷史紀錄</span>
                 </button>
-                <button onclick="switchTab('guide')" id="nav-btn-guide" class="nav-tab nav-tab-inactive flex items-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap">
-                    <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <button onclick="switchTab('guide')" id="nav-btn-guide" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-cyan-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     <span>使用手冊</span>
                 </button>
             </nav>
 
-            <!-- Quick Theme Switch Button -->
-            <div class="flex items-center gap-2">
-                <button onclick="toggleTheme()" class="p-2 rounded-xl dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white shadow-sm transition-colors" title="切換深淺色主題">
-                    <svg id="theme-icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                    <svg id="theme-icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <!-- Quick Theme Switch Button on Desktop (hidden on mobile, visible lg:flex) -->
+            <div class="hidden lg:flex items-center gap-2 shrink-0">
+                <button onclick="toggleTheme()" class="theme-toggle-btn p-2 rounded-xl dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white shadow-sm transition-colors" title="切換深淺色主題">
+                    <svg class="theme-icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg class="theme-icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 </button>
             </div>
         </div>
@@ -1602,6 +1622,8 @@
             if (activeBtn) {
                 activeBtn.classList.remove('nav-tab-inactive', 'dark:text-slate-400', 'text-slate-600');
                 activeBtn.classList.add('nav-tab-active', 'dark:bg-slate-800', 'bg-white', 'text-slate-900', 'dark:text-white');
+                // Scroll into view on mobile so the selected tab is always visible
+                activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
 
             // Stop camera if leaving scanner
@@ -1613,20 +1635,20 @@
         // Theme Toggle (Dark / Light)
         function toggleTheme() {
             const html = document.documentElement;
-            const moonIcon = document.getElementById('theme-icon-moon');
-            const sunIcon = document.getElementById('theme-icon-sun');
+            const moonIcons = document.querySelectorAll('.theme-icon-moon');
+            const sunIcons = document.querySelectorAll('.theme-icon-sun');
 
             if (html.classList.contains('light')) {
                 html.classList.remove('light');
                 html.classList.add('dark');
-                moonIcon.classList.add('hidden');
-                sunIcon.classList.remove('hidden');
+                moonIcons.forEach(i => i.classList.add('hidden'));
+                sunIcons.forEach(i => i.classList.remove('hidden'));
                 showToast('已切換為質感深色模式 🌙');
             } else {
                 html.classList.remove('dark');
                 html.classList.add('light');
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
+                sunIcons.forEach(i => i.classList.add('hidden'));
+                moonIcons.forEach(i => i.classList.remove('hidden'));
                 showToast('已切換為清新溫柔淺色風格 🌸');
             }
         }
