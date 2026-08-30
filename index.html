@@ -2341,54 +2341,46 @@
                     AppState.codeReader = new ZXing.BrowserMultiFormatReader(hints);
                 }
 
-                // Explicit mobile video stream attributes to prevent black screen
+                // Explicit video element setup for mobile browsers
                 videoElem.setAttribute('autoplay', 'true');
                 videoElem.setAttribute('muted', 'true');
                 videoElem.setAttribute('playsinline', 'true');
                 videoElem.setAttribute('webkit-playsinline', 'true');
                 videoElem.muted = true;
 
-                // Try to list available camera devices
-                let videoInputDevices = [];
-                try {
-                    videoInputDevices = await AppState.codeReader.listVideoInputDevices();
-                } catch (e) {
-                    console.warn('Could not list devices beforehand', e);
-                }
-
-                deviceSelect.innerHTML = '';
-                let defaultDeviceId = undefined;
-                let rearCameraFound = false;
-
-                if (videoInputDevices && videoInputDevices.length > 0) {
-                    videoInputDevices.forEach((device, index) => {
-                        const option = document.createElement('option');
-                        option.value = device.deviceId;
-                        const label = device.label || `攝影鏡頭 ${index + 1}`;
-                        option.text = label;
-
-                        // Prefer rear / environment camera on smartphones
-                        const isBack = /back|rear|environment|後/i.test(label);
-                        if (isBack && !rearCameraFound) {
-                            option.selected = true;
-                            defaultDeviceId = device.deviceId;
-                            rearCameraFound = true;
-                        }
-                        deviceSelect.appendChild(option);
-                    });
-
-                    if (!rearCameraFound && deviceSelect.options.length > 0) {
-                        // On many mobile devices without explicit labels, the last device is often the rear camera
-                        if (videoInputDevices.length > 1) {
-                            deviceSelect.selectedIndex = videoInputDevices.length - 1;
-                            defaultDeviceId = deviceSelect.value;
-                        } else {
-                            defaultDeviceId = deviceSelect.value;
-                        }
+                // 1. Get user media stream directly using standard constraints (facingMode: environment for rear camera)
+                let stream;
+                const constraints = {
+                    audio: false,
+                    video: {
+                        facingMode: { ideal: "environment" },
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
                     }
+                };
+
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia(constraints);
+                } catch (errConstraint) {
+                    console.warn('Environment facingMode constraint failed, fallback to basic video', errConstraint);
+                    stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                 }
 
-                const selectedDeviceId = deviceSelect.value || defaultDeviceId || undefined;
+                AppState.cameraStream = stream;
+                videoElem.srcObject = stream;
+                
+                try {
+                    await videoElem.play();
+                } catch (e) {
+                    console.warn('Video play error:', e);
+                }
+
+                // 2. Start ZXing decoding directly from stream
+                AppState.codeReader.decodeFromStream(stream, videoElem, (result, err) => {
+                    if (result) {
+                        handleScanSuccess(result.getText());
+                    }
+                });
 
                 inactiveView.classList.add('hidden');
                 btnToggle.textContent = '關閉鏡頭';
@@ -2396,40 +2388,35 @@
                 btnToggle.classList.add('bg-rose-600', 'hover:bg-rose-500');
                 AppState.isCameraRunning = true;
 
-                // Start decoding from chosen video device
-                await AppState.codeReader.decodeFromVideoDevice(selectedDeviceId, videoElem, (result, err) => {
-                    if (result) {
-                        handleScanSuccess(result.getText());
-                    }
-                });
-
-                // Auto-play the video element if needed
+                // 3. Populate device select with real device labels now that permission is active
                 try {
-                    await videoElem.play();
-                } catch (e) {}
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    const videoDevices = devices.filter(d => d.kind === 'videoinput');
+                    const activeTrack = stream.getVideoTracks()[0];
+                    const activeSettings = activeTrack ? activeTrack.getSettings() : {};
 
-                // After permission is granted, device labels become available, so refresh the list
-                setTimeout(async () => {
-                    try {
-                        const updatedDevices = await AppState.codeReader.listVideoInputDevices();
-                        if (updatedDevices && updatedDevices.length > 0) {
-                            const curVal = deviceSelect.value;
-                            deviceSelect.innerHTML = '';
-                            updatedDevices.forEach((device, idx) => {
-                                const opt = document.createElement('option');
-                                opt.value = device.deviceId;
-                                opt.text = device.label || `攝影鏡頭 ${idx + 1}`;
-                                if (device.deviceId === curVal) opt.selected = true;
-                                deviceSelect.appendChild(opt);
-                            });
+                    deviceSelect.innerHTML = '';
+                    videoDevices.forEach((device, index) => {
+                        const option = document.createElement('option');
+                        option.value = device.deviceId;
+                        let label = device.label;
+                        if (!label) {
+                            label = index === 0 ? '主鏡頭 (後置)' : `攝影鏡頭 ${index + 1}`;
                         }
-                    } catch(e) {}
-                }, 1000);
+                        option.text = label;
+                        if (activeSettings.deviceId && device.deviceId === activeSettings.deviceId) {
+                            option.selected = true;
+                        }
+                        deviceSelect.appendChild(option);
+                    });
+                } catch(e) {
+                    console.warn('Enumerate devices error:', e);
+                }
 
-                showToast('相機鏡頭已啟動，請將 QR Code 置於方框內...');
+                showToast('相機已啟動，請將 QR Code 置於方框內...');
             } catch (err) {
                 console.error('Camera scanning error:', err);
-                showToast('無法開啟相機鏡頭：請確認已允許相機權限');
+                showToast('無法開啟相機：' + (err.message || '請確認已授權相機權限'));
                 stopCameraScanning();
             }
         }
@@ -2438,38 +2425,59 @@
             if (!AppState.isCameraRunning) return;
             const videoElem = document.getElementById('scanner-video');
             const deviceSelect = document.getElementById('camera-device-select');
-            const selectedDeviceId = deviceSelect.value || undefined;
+            const selectedDeviceId = deviceSelect.value;
+            if (!selectedDeviceId) return;
 
             try {
+                if (AppState.cameraStream) {
+                    AppState.cameraStream.getTracks().forEach(track => track.stop());
+                    AppState.cameraStream = null;
+                }
                 if (AppState.codeReader) {
                     AppState.codeReader.reset();
                 }
+
                 videoElem.setAttribute('autoplay', 'true');
                 videoElem.setAttribute('muted', 'true');
                 videoElem.setAttribute('playsinline', 'true');
                 videoElem.setAttribute('webkit-playsinline', 'true');
                 videoElem.muted = true;
 
-                await AppState.codeReader.decodeFromVideoDevice(selectedDeviceId, videoElem, (result, err) => {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: false,
+                    video: { deviceId: { exact: selectedDeviceId } }
+                });
+
+                AppState.cameraStream = stream;
+                videoElem.srcObject = stream;
+                try {
+                    await videoElem.play();
+                } catch(e) {}
+
+                AppState.codeReader.decodeFromStream(stream, videoElem, (result, err) => {
                     if (result) {
                         handleScanSuccess(result.getText());
                     }
                 });
 
-                try {
-                    await videoElem.play();
-                } catch(e) {}
-
-                showToast('已切換鏡頭');
+                showToast('已切換攝影鏡頭');
             } catch (err) {
                 console.error('Switch camera error:', err);
-                showToast('切換鏡頭失敗，請重新嘗試');
+                showToast('切換鏡頭失敗：' + (err.message || ''));
             }
         }
 
         function stopCameraScanning() {
+            if (AppState.cameraStream) {
+                AppState.cameraStream.getTracks().forEach(track => track.stop());
+                AppState.cameraStream = null;
+            }
             if (AppState.codeReader) {
                 AppState.codeReader.reset();
+            }
+            const videoElem = document.getElementById('scanner-video');
+            if (videoElem) {
+                videoElem.srcObject = null;
             }
             AppState.isCameraRunning = false;
             document.getElementById('camera-inactive-view').classList.remove('hidden');
