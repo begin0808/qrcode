@@ -16,6 +16,15 @@
     <meta name="twitter:title" content="Studio0808 QR Code 萬用工具箱">
     <meta name="twitter:description" content="免費、無廣告、免登入！支援 8 大內容格式、漸層美化、內建短網址、圖片轉 QR、相機與截圖解碼。">
     
+    <!-- Progressive Web App (PWA) & Mobile Meta Tags -->
+    <meta name="theme-color" content="#10b981">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="QR萬用箱">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
     <!-- Favicon: High-resolution Gradient QR Icon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='favicon-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='50%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23favicon-grad)'/%3E%3Cg fill='%23ffffff'%3E%3Cpath d='M6 6h8v8H6V6zm2 2v4h4V8H8zm12-2h8v8h-8V6zm2 2v4h4V8h-4zM6 18h8v8H6v-8zm2 2v4h4v-4H8zm10-2h3v3h-3v-3zm5 0h3v3h-3v-3zm-5 5h3v3h-3v-3zm5 0h3v3h-3v-3zm-2.5-2.5h3v3h-3v-3z'/%3E%3C/g%3E%3C/svg%3E">
 
@@ -220,6 +229,16 @@
             animation: scan-anim 2.5s infinite ease-in-out;
         }
 
+        /* Scan success visual flash */
+        @keyframes scan-success-pulse {
+            0% { border-color: #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.95), inset 0 0 20px rgba(16, 185, 129, 0.5); }
+            50% { border-color: #10b981; box-shadow: 0 0 25px rgba(16, 185, 129, 0.7); }
+            100% { border-color: rgba(236, 72, 153, 0.8); box-shadow: none; }
+        }
+        .scan-success-anim {
+            animation: scan-success-pulse 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
         /* Tab transition */
         .tab-content {
             display: none;
@@ -307,17 +326,17 @@
 
             <!-- Navigation Tabs (Full width scrollable on mobile, compact centered on desktop) -->
             <nav class="nav-container flex items-center dark:bg-slate-900/90 bg-slate-100 p-1 sm:p-1.5 rounded-xl border dark:border-slate-800/90 border-slate-200 text-xs sm:text-sm font-medium overflow-x-auto no-scrollbar max-w-full w-full lg:w-auto gap-1">
-                <button onclick="switchTab('generator')" id="nav-btn-generator" class="nav-tab nav-tab-active flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-white dark:bg-slate-800 bg-white text-slate-900 shadow-sm transition-all whitespace-nowrap shrink-0">
+                <button onclick="switchTab('scanner')" id="nav-btn-scanner" class="nav-tab nav-tab-active flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-white dark:bg-slate-800 bg-white text-slate-900 shadow-sm transition-all whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-pink-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                    <span>掃描與解碼</span>
+                </button>
+                <button onclick="switchTab('generator')" id="nav-btn-generator" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
                     <svg class="w-4 h-4 text-brand-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                     <span>產生與美化</span>
                 </button>
                 <button onclick="switchTab('image-qr')" id="nav-btn-image-qr" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
                     <svg class="w-4 h-4 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     <span>圖片轉 QR</span>
-                </button>
-                <button onclick="switchTab('scanner')" id="nav-btn-scanner" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
-                    <svg class="w-4 h-4 text-pink-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
-                    <span>掃描與解碼</span>
                 </button>
                 <button onclick="switchTab('batch')" id="nav-btn-batch" class="nav-tab nav-tab-inactive flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap shrink-0">
                     <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -349,7 +368,7 @@
         <!-- ========================================================================= -->
         <!-- TAB 1: QR CODE 產生器與深度美化 (Generator) -->
         <!-- ========================================================================= -->
-        <section id="tab-generator" class="tab-content active">
+        <section id="tab-generator" class="tab-content">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 
                 <!-- LEFT COLUMN: Content Input & Quick Shorten (4 cols) -->
@@ -979,47 +998,74 @@
         </section>
 
         <!-- ========================================================================= -->
-        <!-- TAB 3: QR CODE 掃描與解碼 (Scanner & Decoder) -->
+        <!-- TAB 3: QR CODE 掃描與解碼 (Scanner & Decoder - Default Active) -->
         <!-- ========================================================================= -->
-        <section id="tab-scanner" class="tab-content">
-            <div class="max-w-4xl mx-auto space-y-6">
+        <section id="tab-scanner" class="tab-content active">
+            <div class="max-w-4xl mx-auto space-y-5">
                 
                 <!-- Mode Switch Tabs -->
                 <div class="flex items-center justify-center gap-3">
                     <button onclick="setScannerMode('camera')" id="btn-scan-camera" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-600 to-indigo-600 text-white font-bold text-sm shadow-md transition-all flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        相機即時掃描
+                        <span>相機即時掃描</span>
                     </button>
                     <button onclick="setScannerMode('file')" id="btn-scan-file" class="px-5 py-2.5 rounded-xl dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 hover:border-slate-400 dark:text-slate-300 text-slate-700 font-semibold text-sm shadow-sm transition-all flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        圖片上傳 / 剪貼簿貼上 (Ctrl+V)
+                        <span>圖片上傳 / 剪貼簿貼上 (Ctrl+V)</span>
                     </button>
                 </div>
 
                 <!-- Camera Live Scan Card -->
-                <div id="scanner-camera-box" class="glass-panel p-6 rounded-3xl space-y-4">
-                    <div class="flex items-center justify-between border-b dark:border-slate-800 border-slate-200 pb-3">
+                <div id="scanner-camera-box" class="glass-panel p-4 sm:p-6 rounded-3xl space-y-4">
+                    <div class="flex flex-wrap items-center justify-between border-b dark:border-slate-800 border-slate-200 pb-3 gap-2">
                         <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-pink-500 animate-ping"></span>
+                            <span class="relative flex h-3 w-3">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+                            </span>
                             <h3 class="font-bold dark:text-white text-slate-900 text-base">即時相機鏡頭掃描</h3>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-600 dark:text-pink-400 font-medium">即開即掃</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <select id="camera-device-select" onchange="switchCameraDevice()" class="px-3 py-1.5 rounded-xl text-xs outline-none dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 dark:text-slate-200 text-slate-700 max-w-[140px] sm:max-w-xs truncate">
-                                <option value="">相機偵測中...</option>
+                        
+                        <!-- Control Actions -->
+                        <div class="flex items-center gap-1.5 sm:gap-2 ml-auto">
+                            <!-- Flip Camera Button (Quick lens switcher) -->
+                            <button id="btn-flip-camera" onclick="flipCamera()" title="切換前後鏡頭" class="p-2 rounded-xl dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition-all flex items-center gap-1.5 border dark:border-slate-700 border-slate-200 shadow-sm" aria-label="切換鏡頭">
+                                <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                <span class="hidden sm:inline">換鏡頭</span>
+                            </button>
+
+                            <!-- Torch Button (Flashlight) -->
+                            <button id="btn-torch-toggle" onclick="toggleTorch()" title="開啟手電筒補光" class="hidden p-2 rounded-xl dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition-all items-center gap-1.5 border dark:border-slate-700 border-slate-200 shadow-sm" aria-label="手電筒補光">
+                                <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                                <span class="hidden sm:inline">補光燈</span>
+                            </button>
+
+                            <!-- Sound Beep Toggle Button -->
+                            <button id="btn-sound-toggle" onclick="toggleSound()" title="掃描提示音" class="p-2 rounded-xl dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition-all flex items-center gap-1.5 border dark:border-slate-700 border-slate-200 shadow-sm" aria-label="掃描音效">
+                                <svg id="sound-icon-on" class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                                <svg id="sound-icon-off" class="w-4 h-4 hidden text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
+                            </button>
+
+                            <!-- Dropdown for specific lens selection if multiple -->
+                            <select id="camera-device-select" onchange="switchCameraDevice()" class="px-2.5 py-1.5 rounded-xl text-xs outline-none dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 dark:text-slate-200 text-slate-700 max-w-[100px] sm:max-w-xs truncate">
+                                <option value="">偵測中...</option>
                             </select>
-                            <button id="btn-toggle-camera" onclick="toggleCameraScanning()" class="px-4 py-1.5 bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs rounded-xl transition-all shrink-0">
-                                開啟鏡頭
+
+                            <!-- Pause / Start Toggle Button -->
+                            <button id="btn-toggle-camera" onclick="toggleCameraScanning()" class="px-3.5 py-1.5 bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs rounded-xl transition-all shrink-0">
+                                關閉鏡頭
                             </button>
                         </div>
                     </div>
 
                     <!-- Video Viewport Container -->
-                    <div class="relative w-full max-w-md mx-auto aspect-square bg-slate-950 rounded-2xl overflow-hidden border-2 dark:border-slate-800 border-slate-300 flex items-center justify-center shadow-inner">
+                    <div id="scanner-viewport-container" class="relative w-full max-w-md mx-auto aspect-square bg-slate-950 rounded-3xl overflow-hidden border-2 dark:border-slate-800 border-slate-300 flex items-center justify-center shadow-2xl cursor-pointer" onclick="handleViewportClick(event)" title="點擊切換鏡頭開啟/重試">
                         <video id="scanner-video" class="w-full h-full object-cover" autoplay playsinline webkit-playsinline muted></video>
                         
                         <!-- Scanning Frame Overlay -->
                         <div id="scanner-overlay" class="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
-                            <div class="w-64 h-64 border-2 border-pink-500/80 rounded-2xl relative">
+                            <div id="scanner-frame-box" class="w-64 h-64 border-2 border-pink-500/80 rounded-2xl relative transition-all duration-300">
                                 <div class="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-pink-400 rounded-tl-lg"></div>
                                 <div class="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-pink-400 rounded-tr-lg"></div>
                                 <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-pink-400 rounded-bl-lg"></div>
@@ -1028,14 +1074,39 @@
                                 <!-- Laser Line -->
                                 <div class="scanner-laser absolute left-2 right-2 h-0.5 bg-gradient-to-r from-pink-500 via-rose-400 to-indigo-500 shadow-[0_0_12px_#f43f5e]"></div>
                             </div>
-                            <span class="text-xs text-white mt-4 bg-slate-900/85 px-3 py-1 rounded-full backdrop-blur">將 QR Code 置於方框內</span>
+                            <span class="text-xs text-white/95 mt-4 bg-slate-900/80 px-3.5 py-1 rounded-full backdrop-blur border border-white/10 shadow-sm flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-pink-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                                <span>將條碼或 QR Code 置於方框內</span>
+                            </span>
                         </div>
 
-                        <!-- Camera Inactive Placeholder -->
-                        <div id="camera-inactive-view" class="absolute inset-0 bg-slate-900/90 flex flex-col items-center justify-center text-center p-6 space-y-3 z-10">
-                            <svg class="w-12 h-12 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                            <p class="text-sm text-slate-300 font-medium">點擊「開啟鏡頭」開始掃描</p>
-                            <p class="text-xs text-slate-500">支援筆電視訊鏡頭與手機前後鏡頭</p>
+                        <!-- Camera Inactive Placeholder (Click to activate) -->
+                        <div id="camera-inactive-view" class="absolute inset-0 bg-slate-900/95 flex flex-col items-center justify-center text-center p-6 space-y-4 z-10 transition-opacity">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-600/30 to-indigo-600/30 border border-pink-500/30 flex items-center justify-center text-pink-400 shadow-glow-indigo">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-base text-white font-bold">鏡頭已暫停或尚未啟動</p>
+                                <p id="camera-inactive-subtitle" class="text-xs text-slate-400 max-w-xs mx-auto">點擊下方按鈕啟動相機開始掃描</p>
+                            </div>
+                            <button onclick="startCameraScanning()" class="px-6 py-2.5 bg-gradient-to-r from-pink-600 to-indigo-600 hover:from-pink-500 hover:to-indigo-500 text-white font-bold text-sm rounded-xl shadow-glow-indigo transition-all transform active:scale-95 flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                <span>立即開啟相機</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Scanner Quick Preferences Bar -->
+                    <div class="flex items-center justify-between text-xs dark:text-slate-400 text-slate-500 px-2 pt-1 border-t dark:border-slate-800/80 border-slate-200">
+                        <label class="flex items-center gap-2 cursor-pointer select-none hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
+                            <input type="checkbox" id="pref-auto-open-url" onchange="toggleAutoOpenPref(event)" class="rounded border-slate-300 text-pink-600 focus:ring-pink-500">
+                            <span>掃到網址直接開啟</span>
+                        </label>
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center gap-1 text-[11px]">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                                支援 ZXing 全格式條碼
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -1059,30 +1130,62 @@
                 </div>
 
                 <!-- Decode Result Output Card -->
-                <div id="decode-result-box" class="glass-panel p-6 rounded-3xl space-y-4 hidden border border-brand-500/40">
+                <div id="decode-result-box" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 hidden border-2 border-brand-500/50 shadow-glow-emerald transition-all">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-brand-500 uppercase tracking-wider flex items-center gap-1.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            解碼成功！讀取到的內容：
-                        </span>
-                        <span id="decode-time-badge" class="text-[11px] dark:text-slate-400 text-slate-500 font-mono"></span>
+                        <div class="flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </span>
+                            <span class="text-sm font-bold text-brand-600 dark:text-brand-400">解碼成功！讀取內容：</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="decode-type-tag" class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-500">URL</span>
+                            <span id="decode-time-badge" class="text-[11px] dark:text-slate-400 text-slate-500 font-mono"></span>
+                        </div>
                     </div>
 
+                    <!-- Result Text Box -->
                     <div class="p-4 dark:bg-slate-900/90 bg-slate-50 rounded-2xl border dark:border-slate-800 border-slate-200">
-                        <p id="decoded-content-text" class="dark:text-white text-slate-900 text-sm break-all font-mono select-all"></p>
+                        <p id="decoded-content-text" class="dark:text-white text-slate-900 text-sm break-all font-mono select-all leading-relaxed"></p>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2 pt-1">
-                        <button onclick="copyDecodedText()" class="px-4 py-2 bg-brand-500 hover:bg-brand-400 text-white font-bold text-xs rounded-xl transition-all flex items-center gap-1.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                            複製內容
-                        </button>
-                        <a id="btn-open-decoded-url" href="#" target="_blank" class="hidden px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl transition-all flex items-center gap-1.5">
+                    <!-- Parsed Content Specialized Cards (e.g. Wi-Fi info) -->
+                    <div id="decoded-wifi-details" class="hidden p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 space-y-2 text-xs">
+                        <div class="flex items-center justify-between">
+                            <span class="text-indigo-600 dark:text-indigo-400 font-bold flex items-center gap-1.5">
+                                📶 Wi-Fi 基地台資訊
+                            </span>
+                            <button onclick="copyWifiPassword()" class="text-xs px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-500 transition-colors">
+                                複製 Wi-Fi 密碼
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-slate-600 dark:text-slate-300">
+                            <div>SSID：<span id="wifi-parsed-ssid" class="font-mono font-bold text-slate-900 dark:text-white"></span></div>
+                            <div>密碼：<span id="wifi-parsed-pass" class="font-mono font-bold text-slate-900 dark:text-white"></span></div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                        <!-- Big Open URL Button -->
+                        <a id="btn-open-decoded-url" href="#" target="_blank" class="hidden px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                            前往網址
+                            <span>前往網址</span>
                         </a>
-                        <button onclick="sendToGenerator(document.getElementById('decoded-content-text').textContent)" class="px-4 py-2 dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 dark:text-slate-300 text-slate-700 text-xs font-medium rounded-xl border dark:border-slate-700 border-slate-200 transition-all">
-                            🎨 載入產生器重新美化
+
+                        <button onclick="copyDecodedText()" class="px-4 py-2.5 bg-brand-500 hover:bg-brand-400 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                            <span>複製內容</span>
+                        </button>
+
+                        <button onclick="sendToGenerator(document.getElementById('decoded-content-text').textContent)" class="px-4 py-2.5 dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 dark:text-slate-300 text-slate-700 text-xs font-medium rounded-xl border dark:border-slate-700 border-slate-200 transition-all flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            <span>轉入美化</span>
+                        </button>
+
+                        <button onclick="resumeScanningAfterResult()" class="px-4 py-2.5 dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 dark:text-slate-300 text-slate-700 text-xs font-semibold rounded-xl border dark:border-slate-700 border-slate-200 transition-all flex items-center gap-1.5 ml-auto">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <span>繼續掃描</span>
                         </button>
                     </div>
                 </div>
@@ -1575,7 +1678,7 @@
     <script>
         // Global Application State
         const AppState = {
-            currentTab: 'generator',
+            currentTab: 'scanner', // Default to Scanner as requested by user
             currentType: 'url',
             qrInstance: null,
             imgQRInstance: null,
@@ -1586,7 +1689,17 @@
             codeReader: null,
             isCameraRunning: false,
             batchItems: [],
-            uploadedImageUrl: null
+            uploadedImageUrl: null,
+            // Scanner & Mobile enhancements
+            soundEnabled: localStorage.getItem('qr_sound_enabled') !== 'false',
+            autoOpenUrl: localStorage.getItem('qr_auto_open') === 'true',
+            currentFacingMode: 'environment',
+            selectedDeviceId: null,
+            isTorchOn: false,
+            lastScannedText: '',
+            lastScannedTime: 0,
+            parsedWifiPass: '',
+            wasCameraRunningBeforeHide: false
         };
 
         // Built-in SVG Logos for Social / Brands
@@ -1604,6 +1717,27 @@
             setupLiveInputListeners();
             setupClipboardPasteListener();
             renderHistoryList();
+            initScannerSettings();
+
+            // Auto-start camera since default tab is scanner!
+            if (AppState.currentTab === 'scanner') {
+                autoStartCamera();
+            }
+        });
+
+        // Handle page visibility change (pause camera when tab is hidden to save power/privacy)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (AppState.isCameraRunning) {
+                    stopCameraScanning();
+                    AppState.wasCameraRunningBeforeHide = true;
+                }
+            } else {
+                if (AppState.currentTab === 'scanner' && AppState.wasCameraRunningBeforeHide) {
+                    AppState.wasCameraRunningBeforeHide = false;
+                    startCameraScanning();
+                }
+            }
         });
 
         // Tab Switching
@@ -1626,8 +1760,12 @@
                 activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
 
-            // Stop camera if leaving scanner
-            if (tabId !== 'scanner' && AppState.isCameraRunning) {
+            // Camera control on tab switch: automatically turn camera on when entering scanner!
+            if (tabId === 'scanner') {
+                if (!AppState.isCameraRunning) {
+                    startCameraScanning();
+                }
+            } else if (AppState.isCameraRunning) {
                 stopCameraScanning();
             }
         }
@@ -2292,6 +2430,17 @@
         // =========================================================================
         // TAB 3: SCANNER & DECODER LOGIC
         // =========================================================================
+        function initScannerSettings() {
+            // Restore sound icon state
+            updateSoundUI();
+            
+            // Restore auto open preference
+            const autoOpenCheckbox = document.getElementById('pref-auto-open-url');
+            if (autoOpenCheckbox) {
+                autoOpenCheckbox.checked = AppState.autoOpenUrl;
+            }
+        }
+
         function setScannerMode(mode) {
             const cameraBox = document.getElementById('scanner-camera-box');
             const fileBox = document.getElementById('scanner-file-box');
@@ -2303,12 +2452,27 @@
                 fileBox.classList.add('hidden');
                 btnCam.className = 'px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-600 to-indigo-600 text-white font-bold text-sm shadow-md transition-all flex items-center gap-2';
                 btnFile.className = 'px-5 py-2.5 rounded-xl dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 hover:border-slate-400 dark:text-slate-300 text-slate-700 font-semibold text-sm shadow-sm transition-all flex items-center gap-2';
+                if (!AppState.isCameraRunning) {
+                    startCameraScanning();
+                }
             } else {
                 cameraBox.classList.add('hidden');
                 fileBox.classList.remove('hidden');
                 btnFile.className = 'px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-600 to-indigo-600 text-white font-bold text-sm shadow-md transition-all flex items-center gap-2';
                 btnCam.className = 'px-5 py-2.5 rounded-xl dark:bg-slate-900 bg-white border dark:border-slate-800 border-slate-200 hover:border-slate-400 dark:text-slate-300 text-slate-700 font-semibold text-sm shadow-sm transition-all flex items-center gap-2';
                 if (AppState.isCameraRunning) stopCameraScanning();
+            }
+        }
+
+        async function autoStartCamera() {
+            try {
+                await startCameraScanning();
+            } catch (err) {
+                console.log('Auto-start camera requires user interaction or permission:', err);
+                const subtitle = document.getElementById('camera-inactive-subtitle');
+                if (subtitle) {
+                    subtitle.textContent = '首次使用請點擊按鈕開啟相機並允許存取權限';
+                }
             }
         }
 
@@ -2325,6 +2489,7 @@
             const btnToggle = document.getElementById('btn-toggle-camera');
             const inactiveView = document.getElementById('camera-inactive-view');
             const deviceSelect = document.getElementById('camera-device-select');
+            const inactiveSubtitle = document.getElementById('camera-inactive-subtitle');
 
             try {
                 if (!AppState.codeReader) {
@@ -2348,21 +2513,34 @@
                 videoElem.setAttribute('webkit-playsinline', 'true');
                 videoElem.muted = true;
 
-                // 1. Get user media stream directly using standard constraints (facingMode: environment for rear camera)
+                // 1. Determine constraints (specific device ID or facingMode environment)
                 let stream;
-                const constraints = {
-                    audio: false,
-                    video: {
-                        facingMode: { ideal: "environment" },
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 }
-                    }
-                };
+                let constraints;
+
+                if (AppState.selectedDeviceId) {
+                    constraints = {
+                        audio: false,
+                        video: {
+                            deviceId: { exact: AppState.selectedDeviceId },
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        }
+                    };
+                } else {
+                    constraints = {
+                        audio: false,
+                        video: {
+                            facingMode: { ideal: AppState.currentFacingMode || "environment" },
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        }
+                    };
+                }
 
                 try {
                     stream = await navigator.mediaDevices.getUserMedia(constraints);
                 } catch (errConstraint) {
-                    console.warn('Environment facingMode constraint failed, fallback to basic video', errConstraint);
+                    console.warn('Ideal constraints failed, fallback to basic video', errConstraint);
                     stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                 }
 
@@ -2375,20 +2553,38 @@
                     console.warn('Video play error:', e);
                 }
 
-                // 2. Start ZXing decoding directly from stream
+                // 2. Start ZXing decoding directly from stream with debounce wrapper
                 AppState.codeReader.decodeFromStream(stream, videoElem, (result, err) => {
                     if (result) {
-                        handleScanSuccess(result.getText());
+                        onScanResult(result);
                     }
                 });
 
                 inactiveView.classList.add('hidden');
-                btnToggle.textContent = '關閉鏡頭';
+                btnToggle.textContent = '暫停鏡頭';
                 btnToggle.classList.remove('bg-pink-600', 'hover:bg-pink-500');
-                btnToggle.classList.add('bg-rose-600', 'hover:bg-rose-500');
+                btnToggle.classList.add('bg-slate-700', 'hover:bg-slate-600');
                 AppState.isCameraRunning = true;
 
-                // 3. Populate device select with real device labels now that permission is active
+                // 3. Inspect video track capabilities (Check flashlight/torch support!)
+                try {
+                    const activeTrack = stream.getVideoTracks()[0];
+                    const capabilities = (activeTrack && activeTrack.getCapabilities) ? activeTrack.getCapabilities() : {};
+                    const torchBtn = document.getElementById('btn-torch-toggle');
+                    if (torchBtn) {
+                        if (capabilities.torch) {
+                            torchBtn.classList.remove('hidden');
+                            torchBtn.classList.add('flex');
+                        } else {
+                            torchBtn.classList.add('hidden');
+                            torchBtn.classList.remove('flex');
+                        }
+                    }
+                } catch(eTorch) {
+                    console.warn('Torch capability check error:', eTorch);
+                }
+
+                // 4. Populate device select with real device labels now that permission is active
                 try {
                     const devices = await navigator.mediaDevices.enumerateDevices();
                     const videoDevices = devices.filter(d => d.kind === 'videoinput');
@@ -2401,11 +2597,12 @@
                         option.value = device.deviceId;
                         let label = device.label;
                         if (!label) {
-                            label = index === 0 ? '主鏡頭 (後置)' : `攝影鏡頭 ${index + 1}`;
+                            label = index === 0 ? '後置主鏡頭' : `攝影鏡頭 ${index + 1}`;
                         }
                         option.text = label;
                         if (activeSettings.deviceId && device.deviceId === activeSettings.deviceId) {
                             option.selected = true;
+                            AppState.selectedDeviceId = device.deviceId;
                         }
                         deviceSelect.appendChild(option);
                     });
@@ -2413,10 +2610,17 @@
                     console.warn('Enumerate devices error:', e);
                 }
 
-                showToast('相機已啟動，請將 QR Code 置於方框內...');
+                showToast('相機已啟動，將 QR Code 對準框內即可自動掃描');
             } catch (err) {
                 console.error('Camera scanning error:', err);
-                showToast('無法開啟相機：' + (err.message || '請確認已授權相機權限'));
+                if (inactiveSubtitle) {
+                    if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                        inactiveSubtitle.textContent = '⚠️ 相機權限未開啟。請在瀏覽器網址列設定允許相機權限後再試。';
+                    } else {
+                        inactiveSubtitle.textContent = '無法存取相機：' + (err.message || '請確認裝置相機運作正常');
+                    }
+                }
+                showToast('無法開啟相機：' + (err.message || '請確認授權相機權限'));
                 stopCameraScanning();
             }
         }
@@ -2427,6 +2631,8 @@
             const deviceSelect = document.getElementById('camera-device-select');
             const selectedDeviceId = deviceSelect.value;
             if (!selectedDeviceId) return;
+
+            AppState.selectedDeviceId = selectedDeviceId;
 
             try {
                 if (AppState.cameraStream) {
@@ -2456,9 +2662,23 @@
 
                 AppState.codeReader.decodeFromStream(stream, videoElem, (result, err) => {
                     if (result) {
-                        handleScanSuccess(result.getText());
+                        onScanResult(result);
                     }
                 });
+
+                // Check torch for new camera
+                const activeTrack = stream.getVideoTracks()[0];
+                const capabilities = (activeTrack && activeTrack.getCapabilities) ? activeTrack.getCapabilities() : {};
+                const torchBtn = document.getElementById('btn-torch-toggle');
+                if (torchBtn) {
+                    if (capabilities.torch) {
+                        torchBtn.classList.remove('hidden');
+                        torchBtn.classList.add('flex');
+                    } else {
+                        torchBtn.classList.add('hidden');
+                        torchBtn.classList.remove('flex');
+                    }
+                }
 
                 showToast('已切換攝影鏡頭');
             } catch (err) {
@@ -2467,7 +2687,125 @@
             }
         }
 
+        async function flipCamera() {
+            const deviceSelect = document.getElementById('camera-device-select');
+            if (deviceSelect && deviceSelect.options.length > 1) {
+                let nextIndex = (deviceSelect.selectedIndex + 1) % deviceSelect.options.length;
+                deviceSelect.selectedIndex = nextIndex;
+                AppState.selectedDeviceId = deviceSelect.value;
+                await switchCameraDevice();
+            } else {
+                AppState.currentFacingMode = (AppState.currentFacingMode === 'user') ? 'environment' : 'user';
+                AppState.selectedDeviceId = null;
+                if (AppState.isCameraRunning) {
+                    stopCameraScanning();
+                }
+                await startCameraScanning();
+            }
+        }
+
+        async function toggleTorch() {
+            if (!AppState.cameraStream) return;
+            const track = AppState.cameraStream.getVideoTracks()[0];
+            if (!track) return;
+            const capabilities = (track.getCapabilities) ? track.getCapabilities() : {};
+            if (!capabilities.torch) {
+                showToast('此鏡頭不支援手電筒補光');
+                return;
+            }
+
+            AppState.isTorchOn = !AppState.isTorchOn;
+            try {
+                await track.applyConstraints({
+                    advanced: [{ torch: AppState.isTorchOn }]
+                });
+                const torchBtn = document.getElementById('btn-torch-toggle');
+                if (torchBtn) {
+                    if (AppState.isTorchOn) {
+                        torchBtn.classList.add('bg-amber-500', 'text-slate-950');
+                        torchBtn.classList.remove('dark:bg-slate-800', 'bg-slate-100', 'text-slate-700', 'dark:text-slate-300');
+                    } else {
+                        torchBtn.classList.remove('bg-amber-500', 'text-slate-950');
+                        torchBtn.classList.add('dark:bg-slate-800', 'bg-slate-100', 'text-slate-700', 'dark:text-slate-300');
+                    }
+                }
+                showToast(AppState.isTorchOn ? '🔦 補光燈已開啟' : '🔦 補光燈已關閉');
+            } catch (e) {
+                console.warn('Torch constraint error:', e);
+                showToast('切換補光燈失敗');
+            }
+        }
+
+        function toggleSound() {
+            AppState.soundEnabled = !AppState.soundEnabled;
+            localStorage.setItem('qr_sound_enabled', AppState.soundEnabled);
+            updateSoundUI();
+            if (AppState.soundEnabled) {
+                playBeep();
+                showToast('🔔 掃描提示音已開啟');
+            } else {
+                showToast('🔕 掃描提示音已靜音');
+            }
+        }
+
+        function updateSoundUI() {
+            const iconOn = document.getElementById('sound-icon-on');
+            const iconOff = document.getElementById('sound-icon-off');
+            if (iconOn && iconOff) {
+                if (AppState.soundEnabled) {
+                    iconOn.classList.remove('hidden');
+                    iconOff.classList.add('hidden');
+                } else {
+                    iconOn.classList.add('hidden');
+                    iconOff.classList.remove('hidden');
+                }
+            }
+        }
+
+        function playBeep() {
+            if (!AppState.soundEnabled) return;
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1400, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1800, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.11);
+            } catch(e) {
+                console.warn('Audio beep error:', e);
+            }
+        }
+
+        function triggerScanVisualEffect() {
+            const frame = document.getElementById('scanner-frame-box');
+            if (frame) {
+                frame.classList.add('scan-success-anim');
+                setTimeout(() => frame.classList.remove('scan-success-anim'), 700);
+            }
+        }
+
         function stopCameraScanning() {
+            if (AppState.isTorchOn && AppState.cameraStream) {
+                try {
+                    const track = AppState.cameraStream.getVideoTracks()[0];
+                    if (track) track.applyConstraints({ advanced: [{ torch: false }] });
+                } catch(e) {}
+                AppState.isTorchOn = false;
+                const torchBtn = document.getElementById('btn-torch-toggle');
+                if (torchBtn) {
+                    torchBtn.classList.remove('bg-amber-500', 'text-slate-950');
+                    torchBtn.classList.add('dark:bg-slate-800', 'bg-slate-100', 'text-slate-700', 'dark:text-slate-300');
+                }
+            }
+
             if (AppState.cameraStream) {
                 AppState.cameraStream.getTracks().forEach(track => track.stop());
                 AppState.cameraStream = null;
@@ -2483,8 +2821,26 @@
             document.getElementById('camera-inactive-view').classList.remove('hidden');
             const btnToggle = document.getElementById('btn-toggle-camera');
             btnToggle.textContent = '開啟鏡頭';
-            btnToggle.classList.remove('bg-rose-600', 'hover:bg-rose-500');
+            btnToggle.classList.remove('bg-slate-700', 'hover:bg-slate-600');
             btnToggle.classList.add('bg-pink-600', 'hover:bg-pink-500');
+        }
+
+        function onScanResult(result) {
+            if (!result) return;
+            const text = result.getText();
+            const now = Date.now();
+
+            // Prevent spamming history and vibration on every single video frame
+            if (text === AppState.lastScannedText && (now - AppState.lastScannedTime < 3500)) {
+                return;
+            }
+            if (now - AppState.lastScannedTime < 1200) {
+                return;
+            }
+
+            AppState.lastScannedText = text;
+            AppState.lastScannedTime = now;
+            handleScanSuccess(text);
         }
 
         function handleDecodeFile(e) {
@@ -2537,23 +2893,72 @@
         }
 
         function handleScanSuccess(text) {
+            playBeep();
             if (navigator.vibrate) {
-                try { navigator.vibrate(100); } catch(e) {}
+                try { navigator.vibrate([60, 40, 60]); } catch(e) {}
             }
+            triggerScanVisualEffect();
+
             const resultBox = document.getElementById('decode-result-box');
             const contentText = document.getElementById('decoded-content-text');
             const timeBadge = document.getElementById('decode-time-badge');
             const openLinkBtn = document.getElementById('btn-open-decoded-url');
+            const typeTag = document.getElementById('decode-type-tag');
+            const wifiDetails = document.getElementById('decoded-wifi-details');
 
             contentText.textContent = text;
             timeBadge.textContent = new Date().toLocaleTimeString();
             resultBox.classList.remove('hidden');
 
+            // Detect Content Type
             if (text.startsWith('http://') || text.startsWith('https://')) {
+                typeTag.textContent = '網址 URL';
+                typeTag.className = 'text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500';
                 openLinkBtn.href = text;
                 openLinkBtn.classList.remove('hidden');
-            } else {
+                openLinkBtn.classList.add('flex');
+                if (wifiDetails) wifiDetails.classList.add('hidden');
+
+                // Auto open URL if preference is on
+                if (AppState.autoOpenUrl) {
+                    showToast('🚀 正在前往網址...');
+                    setTimeout(() => {
+                        window.open(text, '_blank');
+                    }, 500);
+                }
+            } else if (text.startsWith('WIFI:')) {
+                typeTag.textContent = 'WI-FI';
+                typeTag.className = 'text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-500';
                 openLinkBtn.classList.add('hidden');
+                openLinkBtn.classList.remove('flex');
+                
+                // Parse Wi-Fi parameters
+                const ssidMatch = text.match(/S:([^;]+);/);
+                const passMatch = text.match(/P:([^;]+);/);
+                const ssid = ssidMatch ? ssidMatch[1] : '';
+                const pass = passMatch ? passMatch[1] : '';
+                
+                if (wifiDetails) {
+                    const elSsid = document.getElementById('wifi-parsed-ssid');
+                    const elPass = document.getElementById('wifi-parsed-pass');
+                    if (elSsid) elSsid.textContent = ssid;
+                    if (elPass) elPass.textContent = pass || '(無密碼)';
+                    AppState.parsedWifiPass = pass;
+                    wifiDetails.classList.remove('hidden');
+                }
+            } else if (text.startsWith('tel:') || text.startsWith('smsto:')) {
+                typeTag.textContent = '電話/簡訊';
+                typeTag.className = 'text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-500';
+                openLinkBtn.href = text;
+                openLinkBtn.classList.remove('hidden');
+                openLinkBtn.classList.add('flex');
+                if (wifiDetails) wifiDetails.classList.add('hidden');
+            } else {
+                typeTag.textContent = '文字/條碼';
+                typeTag.className = 'text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-500';
+                openLinkBtn.classList.add('hidden');
+                openLinkBtn.classList.remove('flex');
+                if (wifiDetails) wifiDetails.classList.add('hidden');
             }
 
             saveToHistory('掃描解碼', text);
@@ -2565,6 +2970,39 @@
             const text = document.getElementById('decoded-content-text').textContent;
             navigator.clipboard.writeText(text);
             showToast('已複製解碼內容！');
+        }
+
+        function copyWifiPassword() {
+            if (AppState.parsedWifiPass) {
+                navigator.clipboard.writeText(AppState.parsedWifiPass);
+                showToast('已複製 Wi-Fi 密碼！');
+            } else {
+                showToast('此 Wi-Fi 無密碼');
+            }
+        }
+
+        function resumeScanningAfterResult() {
+            AppState.lastScannedText = '';
+            AppState.lastScannedTime = 0;
+            const resultBox = document.getElementById('decode-result-box');
+            if (resultBox) resultBox.classList.add('hidden');
+            if (!AppState.isCameraRunning) {
+                startCameraScanning();
+            } else {
+                showToast('繼續掃描中，請對準 QR Code...');
+            }
+        }
+
+        function toggleAutoOpenPref(e) {
+            AppState.autoOpenUrl = e.target.checked;
+            localStorage.setItem('qr_auto_open', AppState.autoOpenUrl);
+            showToast(AppState.autoOpenUrl ? '已開啟：掃描到網址自動前往' : '已關閉自動前往網址');
+        }
+
+        function handleViewportClick(e) {
+            if (!AppState.isCameraRunning) {
+                startCameraScanning();
+            }
         }
 
         function sendToGenerator(content) {
