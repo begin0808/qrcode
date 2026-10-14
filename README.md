@@ -1,4 +1,4 @@
-# Studio0808 QR Code 萬用工具箱 (All-in-One QR Code Toolkit)
+# Studio0808 QR 百寶箱 (All-in-One QR Code Toolkit)
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-1.0.0-emerald?style=for-the-badge" alt="Version">
@@ -38,7 +38,7 @@
 
 ### ✨ 核心特色
 
-**Studio0808 QR Code 萬用工具箱** 專為個人創作者、商家、行銷人員與開發者打造，提供免安裝、即開即用的全方位 QR Code 應用環境：
+**Studio0808 QR 百寶箱** 專為個人創作者、商家、行銷人員與開發者打造，提供免安裝、即開即用的全方位 QR Code 應用環境：
 
 1. **🎨 頂級視覺美化與客製化**：
    - 支援 6 種點陣顆粒造型（經典方形、圓點、圓角、優雅古典、平滑圓弧、水滴超圓角）。

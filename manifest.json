@@ -1,6 +1,6 @@
 {
-  "name": "Studio0808 QR Code 萬用工具箱",
-  "short_name": "QR萬用箱",
+  "name": "Studio0808 QR 百寶箱",
+  "short_name": "QR百寶箱",
   "description": "即時相機掃描、QR Code 產生美化、圖片解碼與短網址工具",
   "start_url": "./index.html",
   "scope": "./",
